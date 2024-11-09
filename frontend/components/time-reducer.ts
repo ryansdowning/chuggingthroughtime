@@ -4,6 +4,7 @@ export type TimeState = {
   secondsSinceMidnight: number;
   paused: boolean;
   incrementMultiplier: number;
+  showPopups: boolean;
 };
 
 export type TimeAction =
@@ -25,6 +26,9 @@ export type TimeAction =
   | {
       type: "set-increment-multiplier";
       payload: { incrementMultiplier: number };
+    }
+  | {
+      type: "toggle-popups";
     };
 
 // Conver [-infinity, infinity] to [0, 86400]
@@ -61,6 +65,11 @@ export function timeReducer(state: TimeState, action: TimeAction): TimeState {
       return {
         ...state,
         incrementMultiplier: action.payload.incrementMultiplier,
+      };
+    case "toggle-popups":
+      return {
+        ...state,
+        showPopups: !state.showPopups,
       };
     default:
       return state;

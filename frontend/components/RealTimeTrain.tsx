@@ -1,5 +1,3 @@
-import { useEffect, useState } from "react";
-
 import L from "leaflet";
 import { Marker, Popup, useMap } from "react-leaflet";
 
@@ -7,7 +5,7 @@ import { TRAIN_ICON } from "./constants";
 import { TimeReducerProps } from "./time-reducer";
 import { Coords, Route } from "./types";
 
-const PAUSE_AFTER_ARRIVAL = 30; // seconds
+const WAIT_BEFORE_AND_AFTER = 300; // seconds
 
 interface RealTimeTrainProps extends TimeReducerProps {
   route: Route;
@@ -22,10 +20,9 @@ export default function RealTimeTrain({
     departureCoords,
     arrivalTime,
     arrivalCoords,
-    trainIdentifier,
+    trainName,
   } = route;
   const map = useMap();
-  const [position, setPosition] = useState(L.latLng(...departureCoords));
   const totalDuration = arrivalTime - departureTime;
   const latDiff = arrivalCoords[0] - departureCoords[0];
   const lngDiff = arrivalCoords[1] - departureCoords[1];
@@ -38,46 +35,29 @@ export default function RealTimeTrain({
     return [newPosition.lat, newPosition.lng];
   };
 
-  useEffect(() => {
-    let animationFrameId: number;
+  const position = (() => {
+    const { secondsSinceMidnight } = timeState;
+    const elapsedTime = secondsSinceMidnight - departureTime;
+    if (elapsedTime < 0) {
+      // Train hasn't left yet
+      return L.latLng(...departureCoords);
+    } else if (elapsedTime >= totalDuration) {
+      return L.latLng(...arrivalCoords);
+    }
 
-    const animateTrain = () => {
-      const { secondsSinceMidnight } = timeState;
-      const elapsedTime = secondsSinceMidnight - departureTime;
-      if (elapsedTime < 0) {
-        // Train hasn't left yet
-        return;
-      } else if (elapsedTime >= totalDuration) {
-        setPosition(L.latLng(...arrivalCoords));
-      }
+    return L.latLng(...getCoords(elapsedTime));
+  })();
 
-      setPosition(L.latLng(...getCoords(elapsedTime)));
-
-      // Request the next animation frame and save its ID
-      animationFrameId = requestAnimationFrame(animateTrain);
-    };
-
-    // Start the animation
-    animateTrain();
-
-    // Cleanup: stop animation if the component unmounts
-    return () => cancelAnimationFrame(animationFrameId);
-  }, [
-    map,
-    departureTime,
-    departureCoords,
-    arrivalTime,
-    arrivalCoords,
-    timeState.secondsSinceMidnight,
-  ]);
-
-  if (timeState.secondsSinceMidnight > arrivalTime + PAUSE_AFTER_ARRIVAL) {
+  if (
+    timeState.secondsSinceMidnight - WAIT_BEFORE_AND_AFTER < departureTime ||
+    timeState.secondsSinceMidnight > arrivalTime + WAIT_BEFORE_AND_AFTER
+  ) {
     return null;
   }
 
   return (
     <Marker position={position} icon={TRAIN_ICON}>
-      <Popup>{trainIdentifier || "Unknown Train"}</Popup>
+      <Popup>{trainName || "Unknown Train"}</Popup>
     </Marker>
   );
 }

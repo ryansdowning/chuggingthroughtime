@@ -32,7 +32,7 @@ export default function Map(props: TimeReducerProps) {
         url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      <Stations />
+      <Stations {...props} />
       <Routes />
       <Trains {...props} />
     </MapContainer>
