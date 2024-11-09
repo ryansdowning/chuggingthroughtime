@@ -12,6 +12,8 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 
 from pathlib import Path
 import os
+from dotenv import load_dotenv
+load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
 BASE_DIR = Path(__file__).resolve().parent.parent
@@ -74,22 +76,21 @@ WSGI_APPLICATION = "chuggingthroughtime.wsgi.application"
 # Database
 # https://docs.djangoproject.com/en/5.1/ref/settings/#databases
 
-# DATABASES = {
-#     "default": {
-#         "ENGINE": "django.db.backends.sqlite3",
-#         "NAME": BASE_DIR / "db.sqlite3",
-#     }
-# }
-
+prod_db = {
+    "ENGINE": "django.db.backends.postgresql",
+    "NAME": os.environ.get("DB_NAME"),
+    "USER": os.environ.get("DB_USERNAME"),
+    "PASSWORD": os.environ.get("DB_PASSWORD"),
+    "HOST": os.environ.get("DB_HOST"),
+    "PORT": os.environ.get("DB_PORT"),
+}
+local_db = {
+    "ENGINE": "django.db.backends.sqlite3",
+    "NAME": BASE_DIR / "db.sqlite3",
+}
+use_prod_db = os.environ.get("USE_PROD_DB", "False").lower() == "true"
 DATABASES = {
-    "default": {
-        "ENGINE": "django.db.backends.postgresql",
-        "NAME": os.environ.get("DB_NAME"),
-        "USERNAME": os.environ.get("DB_USERNAME"),
-        "PASSWORD": os.environ.get("DB_PASSWORD"),
-        "HOST": os.environ.get("DB_URL"),
-        "PORT": os.environ.get("DB_PORT"),
-    }
+    "default": prod_db if use_prod_db else local_db
 }
 
 
