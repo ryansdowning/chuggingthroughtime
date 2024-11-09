@@ -18,6 +18,7 @@ export default function IndexPage() {
   const [timeState, dispatchTime] = useReducer(timeReducer, {
     secondsSinceMidnight: getSecondsSinceMidnight(),
     paused: false,
+    incrementMultiplier: 1,
   });
 
   useEffect(() => {

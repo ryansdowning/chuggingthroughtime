@@ -1,6 +1,8 @@
 import React from "react";
 
-import { Button, Group, Slider, Text } from "@mantine/core";
+import { useDebouncedCallback } from "use-debounce";
+
+import { Button, Group, Select, Slider, Text } from "@mantine/core";
 import { IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 
 import { TimeReducerProps } from "./time-reducer";
@@ -10,7 +12,14 @@ export default function TimeScrubber({
   dispatchTime,
 }: TimeReducerProps) {
   const { secondsSinceMidnight } = timeState;
+  const unpause = () =>
+    dispatchTime({ type: "set-pause", payload: { paused: false } });
+  const debouncedUnpause = useDebouncedCallback(unpause, 1000);
   const setTime = (secondsSinceMidnight: number) => {
+    if (!timeState.paused) {
+      dispatchTime({ type: "set-pause", payload: { paused: true } });
+      debouncedUnpause();
+    }
     dispatchTime({ type: "set-time", payload: { secondsSinceMidnight } });
   };
   // Helper function to format seconds into HH:MM:SS format
@@ -41,6 +50,30 @@ export default function TimeScrubber({
             <IconPlayerPause size={16} />
           )}
         </Button>
+        <Select
+          value={timeState.incrementMultiplier.toString()}
+          onChange={(value) =>
+            value &&
+            dispatchTime({
+              type: "set-increment-multiplier",
+              payload: { incrementMultiplier: parseInt(value) },
+            })
+          }
+          data={[
+            { value: "1", label: "1x" },
+            { value: "2", label: "2x" },
+            { value: "4", label: "4x" },
+            { value: "8", label: "8x" },
+            { value: "16", label: "16x" },
+            { value: "30", label: "30x" },
+            { value: "60", label: "60x" },
+          ]}
+          size="xs"
+          style={{ width: "70px" }}
+          styles={{
+            dropdown: { zIndex: 1000 },
+          }}
+        />
       </Group>
       <Slider
         min={0}
@@ -55,6 +88,7 @@ export default function TimeScrubber({
           { value: 86399, label: "23:59:59" },
         ]}
         step={1}
+        label={(value) => formatTime(value)}
       />
     </div>
   );
