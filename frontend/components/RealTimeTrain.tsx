@@ -5,15 +5,19 @@ import { Marker, Popup, useMap } from "react-leaflet";
 
 import { TRAIN_ICON } from "./constants";
 import { getSecondsSinceMidnight } from "./helpers";
+import { TimeReducerProps } from "./time-reducer";
 import { Coords, Route } from "./types";
 
 const PAUSE_AFTER_ARRIVAL = 30; // seconds
 
-interface RealTimeTrainProps {
+interface RealTimeTrainProps extends TimeReducerProps {
   route: Route;
 }
 
-export default function RealTimeTrain({ route }: RealTimeTrainProps) {
+export default function RealTimeTrain({
+  route,
+  timeState,
+}: RealTimeTrainProps) {
   const {
     departureTime,
     departureCoords,
@@ -39,7 +43,7 @@ export default function RealTimeTrain({ route }: RealTimeTrainProps) {
     let animationFrameId: number;
 
     const animateTrain = () => {
-      const secondsSinceMidnight = getSecondsSinceMidnight();
+      const { secondsSinceMidnight } = timeState;
       const elapsedTime = secondsSinceMidnight - departureTime;
       if (elapsedTime < 0) {
         // Train hasn't left yet
@@ -59,7 +63,14 @@ export default function RealTimeTrain({ route }: RealTimeTrainProps) {
 
     // Cleanup: stop animation if the component unmounts
     return () => cancelAnimationFrame(animationFrameId);
-  }, [map, departureTime, departureCoords, arrivalTime, arrivalCoords]);
+  }, [
+    map,
+    departureTime,
+    departureCoords,
+    arrivalTime,
+    arrivalCoords,
+    timeState.secondsSinceMidnight,
+  ]);
 
   if (getSecondsSinceMidnight() > arrivalTime + PAUSE_AFTER_ARRIVAL) {
     return null;

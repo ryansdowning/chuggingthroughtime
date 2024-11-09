@@ -9,6 +9,7 @@ import { MapContainer, TileLayer } from "react-leaflet";
 import { WASHINGTON_DC_COORDS } from "./constants";
 import Routes from "./Routes";
 import Stations from "./Stations";
+import { TimeReducerProps } from "./time-reducer";
 import Trains from "./Trains";
 
 L.Icon.Default.mergeOptions({
@@ -20,7 +21,7 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-const Map = () => {
+export default function Map(props: TimeReducerProps) {
   return (
     <MapContainer
       center={WASHINGTON_DC_COORDS}
@@ -33,9 +34,7 @@ const Map = () => {
       />
       <Stations />
       <Routes />
-      <Trains />
+      <Trains {...props} />
     </MapContainer>
   );
-};
-
-export default Map;
+}

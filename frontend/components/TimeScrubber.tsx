@@ -1,11 +1,18 @@
-import React, { useState } from "react";
+import React from "react";
 
-import { Slider, Text } from "@mantine/core";
+import { Button, Group, Slider, Text } from "@mantine/core";
+import { IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 
-export default function TimeScrubber() {
-  // Define the state to store the selected time in seconds (from 0 to 86399)
-  const [timeInSeconds, setTimeInSeconds] = useState(0);
+import { TimeReducerProps } from "./time-reducer";
 
+export default function TimeScrubber({
+  timeState,
+  dispatchTime,
+}: TimeReducerProps) {
+  const { secondsSinceMidnight } = timeState;
+  const setTime = (secondsSinceMidnight: number) => {
+    dispatchTime({ type: "set-time", payload: { secondsSinceMidnight } });
+  };
   // Helper function to format seconds into HH:MM:SS format
   const formatTime = (seconds: number) => {
     const hours = Math.floor(seconds / 3600);
@@ -17,24 +24,37 @@ export default function TimeScrubber() {
   };
 
   return (
-    <div style={{ textAlign: "center", padding: "1em 2em" }}>
+    <div style={{ textAlign: "center", width: "100%", padding: "1em 2em" }}>
       {/* Display the current time in HH:MM:SS format */}
-      <Text style={{ fontWeight: 500, fontSize: "1.2rem" }}>
-        {formatTime(timeInSeconds)}
-      </Text>
+      <Group w="100%" justify="center">
+        <Text style={{ fontWeight: 500, fontSize: "1.2rem" }}>
+          {formatTime(secondsSinceMidnight)}
+        </Text>
+        <Button
+          onClick={() => dispatchTime({ type: "toggle-pause" })}
+          variant="outline"
+          size="xs"
+        >
+          {timeState.paused ? (
+            <IconPlayerPlay size={16} />
+          ) : (
+            <IconPlayerPause size={16} />
+          )}
+        </Button>
+      </Group>
       <Slider
         min={0}
-        max={86399} // 23 hours, 59 minutes, and 59 seconds in total seconds
-        value={timeInSeconds}
-        onChange={setTimeInSeconds}
+        max={86399}
+        value={secondsSinceMidnight}
+        onChange={setTime}
         marks={[
           { value: 0, label: "00:00:00" },
-          { value: 21600, label: "06:00:00" }, // 6 AM
-          { value: 43200, label: "12:00:00" }, // 12 PM
-          { value: 64800, label: "18:00:00" }, // 6 PM
-          { value: 86399, label: "23:59:59" }, // 11:59:59 PM
+          { value: 21600, label: "06:00:00" },
+          { value: 43200, label: "12:00:00" },
+          { value: 64800, label: "18:00:00" },
+          { value: 86399, label: "23:59:59" },
         ]}
-        step={1} // Set step to 1 second for finer control
+        step={1}
       />
     </div>
   );
