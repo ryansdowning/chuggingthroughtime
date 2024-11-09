@@ -33,7 +33,7 @@ export default function TimeScrubber({
   };
 
   return (
-    <div style={{ textAlign: "center", width: "100%", padding: "1em 2em" }}>
+    <div style={{ textAlign: "center", width: "95%", padding: "1em 2em" }}>
       {/* Display the current time in HH:MM:SS format */}
       <Group w="100%" justify="center">
         <Text style={{ fontWeight: 500, fontSize: "1.2rem" }}>
