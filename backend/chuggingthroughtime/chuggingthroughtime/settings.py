@@ -13,6 +13,7 @@ https://docs.djangoproject.com/en/5.1/ref/settings/
 from pathlib import Path
 import os
 from dotenv import load_dotenv
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -89,9 +90,7 @@ local_db = {
     "NAME": BASE_DIR / "db.sqlite3",
 }
 use_prod_db = os.environ.get("USE_PROD_DB", "False").lower() == "true"
-DATABASES = {
-    "default": prod_db if use_prod_db else local_db
-}
+DATABASES = {"default": prod_db if use_prod_db else local_db}
 
 
 # Password validation
