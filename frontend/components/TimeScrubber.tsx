@@ -2,7 +2,7 @@ import React from "react";
 
 import { useDebouncedCallback } from "use-debounce";
 
-import { Button, Group, Select, Slider, Text } from "@mantine/core";
+import { Button, Group, Select, Slider, Stack, Text } from "@mantine/core";
 import {
   IconEye,
   IconEyeOff,
@@ -39,59 +39,60 @@ export default function TimeScrubber({
 
   return (
     <div style={{ textAlign: "center", width: "95%", padding: "1em 2em" }}>
-      {/* Display the current time in HH:MM:SS format */}
-      <Group w="100%" justify="center">
+      <Stack gap="xs">
+        <Group w="100%" justify="center">
+          <Button
+            onClick={() => dispatchTime({ type: "toggle-pause" })}
+            variant="outline"
+            size="xs"
+          >
+            {timeState.paused ? (
+              <IconPlayerPlay size={16} />
+            ) : (
+              <IconPlayerPause size={16} />
+            )}
+          </Button>
+          <Select
+            value={timeState.incrementMultiplier.toString()}
+            onChange={(value) =>
+              value &&
+              dispatchTime({
+                type: "set-increment-multiplier",
+                payload: { incrementMultiplier: parseInt(value) },
+              })
+            }
+            data={[
+              { value: "1", label: "1x" },
+              { value: "2", label: "2x" },
+              { value: "4", label: "4x" },
+              { value: "8", label: "8x" },
+              { value: "16", label: "16x" },
+              { value: "30", label: "30x" },
+              { value: "60", label: "60x" },
+              { value: "900", label: "900x" },
+            ]}
+            size="xs"
+            style={{ width: "70px" }}
+            styles={{
+              dropdown: { zIndex: 1000 },
+            }}
+          />
+          <Button
+            onClick={() => dispatchTime({ type: "toggle-popups" })}
+            variant="outline"
+            size="xs"
+          >
+            {timeState.showPopups ? (
+              <IconEye size={16} />
+            ) : (
+              <IconEyeOff size={16} />
+            )}
+          </Button>
+        </Group>
         <Text style={{ fontWeight: 500, fontSize: "1.2rem" }}>
           {formatTime(secondsSinceMidnight)}
         </Text>
-        <Button
-          onClick={() => dispatchTime({ type: "toggle-pause" })}
-          variant="outline"
-          size="xs"
-        >
-          {timeState.paused ? (
-            <IconPlayerPlay size={16} />
-          ) : (
-            <IconPlayerPause size={16} />
-          )}
-        </Button>
-        <Select
-          value={timeState.incrementMultiplier.toString()}
-          onChange={(value) =>
-            value &&
-            dispatchTime({
-              type: "set-increment-multiplier",
-              payload: { incrementMultiplier: parseInt(value) },
-            })
-          }
-          data={[
-            { value: "1", label: "1x" },
-            { value: "2", label: "2x" },
-            { value: "4", label: "4x" },
-            { value: "8", label: "8x" },
-            { value: "16", label: "16x" },
-            { value: "30", label: "30x" },
-            { value: "60", label: "60x" },
-            { value: "900", label: "900x" },
-          ]}
-          size="xs"
-          style={{ width: "70px" }}
-          styles={{
-            dropdown: { zIndex: 1000 },
-          }}
-        />
-        <Button
-          onClick={() => dispatchTime({ type: "toggle-popups" })}
-          variant="outline"
-          size="xs"
-        >
-          {timeState.showPopups ? (
-            <IconEye size={16} />
-          ) : (
-            <IconEyeOff size={16} />
-          )}
-        </Button>
-      </Group>
+      </Stack>
       <Slider
         min={0}
         max={86399}
