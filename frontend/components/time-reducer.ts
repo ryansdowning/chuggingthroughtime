@@ -3,6 +3,7 @@ import { Dispatch } from "react";
 export type TimeState = {
   secondsSinceMidnight: number;
   paused: boolean;
+  incrementMultiplier: number;
 };
 
 export type TimeAction =
@@ -20,6 +21,10 @@ export type TimeAction =
   | {
       type: "set-pause";
       payload: { paused: boolean };
+    }
+  | {
+      type: "set-increment-multiplier";
+      payload: { incrementMultiplier: number };
     };
 
 function clampTime(seconds: number): number {
@@ -37,7 +42,8 @@ export function timeReducer(state: TimeState, action: TimeAction): TimeState {
       return {
         ...state,
         secondsSinceMidnight: clampTime(
-          state.secondsSinceMidnight + action.payload.seconds
+          state.secondsSinceMidnight +
+            action.payload.seconds * state.incrementMultiplier
         ),
       };
     case "toggle-pause":
@@ -49,6 +55,11 @@ export function timeReducer(state: TimeState, action: TimeAction): TimeState {
       return {
         ...state,
         paused: action.payload.paused,
+      };
+    case "set-increment-multiplier":
+      return {
+        ...state,
+        incrementMultiplier: action.payload.incrementMultiplier,
       };
     default:
       return state;

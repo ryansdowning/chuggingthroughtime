@@ -2,7 +2,7 @@ import React from "react";
 
 import { useDebouncedCallback } from "use-debounce";
 
-import { Button, Group, Slider, Text } from "@mantine/core";
+import { Button, Group, Select, Slider, Text } from "@mantine/core";
 import { IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 
 import { TimeReducerProps } from "./time-reducer";
@@ -50,6 +50,30 @@ export default function TimeScrubber({
             <IconPlayerPause size={16} />
           )}
         </Button>
+        <Select
+          value={timeState.incrementMultiplier.toString()}
+          onChange={(value) =>
+            value &&
+            dispatchTime({
+              type: "set-increment-multiplier",
+              payload: { incrementMultiplier: parseInt(value) },
+            })
+          }
+          data={[
+            { value: "1", label: "1x" },
+            { value: "2", label: "2x" },
+            { value: "4", label: "4x" },
+            { value: "8", label: "8x" },
+            { value: "16", label: "16x" },
+            { value: "30", label: "30x" },
+            { value: "60", label: "60x" },
+          ]}
+          size="xs"
+          style={{ width: "70px" }}
+          styles={{
+            dropdown: { zIndex: 1000 },
+          }}
+        />
       </Group>
       <Slider
         min={0}

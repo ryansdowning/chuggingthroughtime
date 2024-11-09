@@ -4,7 +4,6 @@ import L from "leaflet";
 import { Marker, Popup, useMap } from "react-leaflet";
 
 import { TRAIN_ICON } from "./constants";
-import { getSecondsSinceMidnight } from "./helpers";
 import { TimeReducerProps } from "./time-reducer";
 import { Coords, Route } from "./types";
 
@@ -72,7 +71,7 @@ export default function RealTimeTrain({
     timeState.secondsSinceMidnight,
   ]);
 
-  if (getSecondsSinceMidnight() > arrivalTime + PAUSE_AFTER_ARRIVAL) {
+  if (timeState.secondsSinceMidnight > arrivalTime + PAUSE_AFTER_ARRIVAL) {
     return null;
   }
 
