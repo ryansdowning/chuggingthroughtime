@@ -1,19 +1,14 @@
-import 'leaflet/dist/leaflet.css';
-import 'leaflet-omnivore';
+import "leaflet/dist/leaflet.css";
+import "leaflet-omnivore";
 
-import React, { useState } from 'react';
+import React from "react";
 
-import L from 'leaflet';
-// MapComponent.tsx
-import {
-  MapContainer,
-  TileLayer,
-} from 'react-leaflet';
+import L from "leaflet";
+import { MapContainer, TileLayer } from "react-leaflet";
 
-import KMLLayer from './KMLLayer';
+import { ROUTES, WASHINGTON_DC_COORDS } from "./constants";
+import RealTimeTrain from "./RealTimeTrain";
 
-// Fix for default icon issues in Leaflet
-delete (L.Icon.Default.prototype as any)._getIconUrl;
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-icon-2x.png",
@@ -23,50 +18,20 @@ L.Icon.Default.mergeOptions({
     "https://cdnjs.cloudflare.com/ajax/libs/leaflet/1.7.1/images/marker-shadow.png",
 });
 
-// Custom hook to load KML data
-// const KMLLayer = ({ kmlUrl }: { kmlUrl: string }) => {
-//   const map = useMap();
-
-//   useEffect(() => {
-//     if (!kmlUrl) return;
-
-//     // Load and parse the KML file
-//     console.log({ L, omnviore: (L as any).omnivore });
-//     const kmlLayer = (L as any).omnivore.kml(kmlUrl);
-
-//     // Add KML layer to the map
-//     kmlLayer.addTo(map);
-
-//     return () => {
-//       // Clean up on unmount
-//       map.removeLayer(kmlLayer);
-//     };
-//   }, [kmlUrl, map]);
-
-//   return null;
-// };
-
 const Map = () => {
-  const washingtonDCPosition: [number, number] = [38.9072, -77.0369]; // Latitude and longitude for Washington, D.C.
-  const [loaded, setLoaded] = useState(false);
-
   return (
     <MapContainer
-      center={washingtonDCPosition}
-      zoom={13}
+      center={WASHINGTON_DC_COORDS}
+      zoom={6}
       style={{ height: "100vh", width: "100%" }}
     >
       <TileLayer
         url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png"
-        // url="https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png"
-        // url="https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      {/* <Marker position={washingtonDCPosition}>
-        <Popup>Washington, D.C.</Popup>
-      </Marker> */}
-      <KMLLayer />
-      {/* <KMLLayer kmlUrl="/static/1861_Railroad.kml" /> */}
+      {ROUTES.map((route, index) => (
+        <RealTimeTrain key={index} route={route} />
+      ))}
     </MapContainer>
   );
 };
