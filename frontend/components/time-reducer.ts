@@ -16,6 +16,10 @@ export type TimeAction =
     }
   | {
       type: "toggle-pause";
+    }
+  | {
+      type: "set-pause";
+      payload: { paused: boolean };
     };
 
 function clampTime(seconds: number): number {
@@ -40,6 +44,11 @@ export function timeReducer(state: TimeState, action: TimeAction): TimeState {
       return {
         ...state,
         paused: !state.paused,
+      };
+    case "set-pause":
+      return {
+        ...state,
+        paused: action.payload.paused,
       };
     default:
       return state;

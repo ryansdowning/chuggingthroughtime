@@ -1,5 +1,7 @@
 import React from "react";
 
+import { useDebouncedCallback } from "use-debounce";
+
 import { Button, Group, Slider, Text } from "@mantine/core";
 import { IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
 
@@ -10,7 +12,14 @@ export default function TimeScrubber({
   dispatchTime,
 }: TimeReducerProps) {
   const { secondsSinceMidnight } = timeState;
+  const unpause = () =>
+    dispatchTime({ type: "set-pause", payload: { paused: false } });
+  const debouncedUnpause = useDebouncedCallback(unpause, 1000);
   const setTime = (secondsSinceMidnight: number) => {
+    if (!timeState.paused) {
+      dispatchTime({ type: "set-pause", payload: { paused: true } });
+      debouncedUnpause();
+    }
     dispatchTime({ type: "set-time", payload: { secondsSinceMidnight } });
   };
   // Helper function to format seconds into HH:MM:SS format
