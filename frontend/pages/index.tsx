@@ -34,7 +34,7 @@ export default function IndexPage() {
   }, [timeState.paused]);
 
   return (
-    <Stack gap="md" w="100%">
+    <Stack gap="md" w="100%" h="100vh" align="center">
       <TimeScrubber timeState={timeState} dispatchTime={dispatchTime} />
       <Map timeState={timeState} dispatchTime={dispatchTime} />
     </Stack>

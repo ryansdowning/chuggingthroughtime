@@ -26,7 +26,7 @@ export default function Map(props: TimeReducerProps) {
     <MapContainer
       center={WASHINGTON_DC_COORDS}
       zoom={6}
-      style={{ height: "100vh", width: "100%" }}
+      style={{ height: "100%", width: "100%" }}
     >
       <TileLayer
         url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png"
