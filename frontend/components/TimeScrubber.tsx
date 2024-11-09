@@ -10,6 +10,7 @@ import {
   IconPlayerPlay,
 } from "@tabler/icons-react";
 
+import { formatTime } from "./helpers";
 import { TimeReducerProps } from "./time-reducer";
 
 export default function TimeScrubber({
@@ -26,15 +27,6 @@ export default function TimeScrubber({
       debouncedUnpause();
     }
     dispatchTime({ type: "set-time", payload: { secondsSinceMidnight } });
-  };
-  // Helper function to format seconds into HH:MM:SS format
-  const formatTime = (seconds: number) => {
-    const hours = Math.floor(seconds / 3600);
-    const mins = Math.floor((seconds % 3600) / 60);
-    const secs = seconds % 60;
-    return `${hours.toString().padStart(2, "0")}:${mins
-      .toString()
-      .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
   };
 
   return (

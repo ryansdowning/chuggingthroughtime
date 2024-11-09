@@ -1,7 +1,10 @@
 import L from "leaflet";
-import { Marker, Popup, useMap } from "react-leaflet";
+import { Marker, Popup } from "react-leaflet";
+
+import { Stack } from "@mantine/core";
 
 import { TRAIN_ICON } from "./constants";
+import { formatTime } from "./helpers";
 import { TimeReducerProps } from "./time-reducer";
 import { Coords, Route } from "./types";
 
@@ -22,7 +25,6 @@ export default function RealTimeTrain({
     arrivalCoords,
     trainName,
   } = route;
-  const map = useMap();
   const totalDuration = arrivalTime - departureTime;
   const latDiff = arrivalCoords[0] - departureCoords[0];
   const lngDiff = arrivalCoords[1] - departureCoords[1];
@@ -57,7 +59,34 @@ export default function RealTimeTrain({
 
   return (
     <Marker position={position} icon={TRAIN_ICON}>
-      <Popup>{trainName || "Unknown Train"}</Popup>
+      <Popup>
+        <Stack gap="xs">
+          <h3>{trainName || "Unknown Train"}</h3>
+          <div>
+            {timeState.secondsSinceMidnight >= departureTime
+              ? "Departed"
+              : "Departing from"}{" "}
+            <span style={{ fontWeight: "bold" }}>
+              {route.departureIdentifier ?? "Unknown Station"}
+            </span>{" "}
+            at {formatTime(departureTime)}
+          </div>
+          <div>
+            {timeState.secondsSinceMidnight >= arrivalTime
+              ? "Arrived"
+              : "Arriving"}
+            {" to "}
+            <span style={{ fontWeight: "bold" }}>
+              {route.arrivalIdentifier ?? "Unknown Station"}
+            </span>{" "}
+            at {formatTime(arrivalTime)}
+          </div>
+          <div>
+            Average speed (est.):{" "}
+            <span style={{ fontWeight: "bold" }}>100 MPH</span>
+          </div>
+        </Stack>
+      </Popup>
     </Marker>
   );
 }

@@ -36,6 +36,12 @@ export default function IndexPage() {
 
   return (
     <Stack gap="md" w="100%" h="100vh" align="center">
+      <a
+        href="http://www.streamlinerschedules.com/concourse/index.html"
+        style={{ padding: "1em 0" }}
+      >
+        Thank you to Steamliner Schedules
+      </a>
       <TimeScrubber timeState={timeState} dispatchTime={dispatchTime} />
       <Map timeState={timeState} dispatchTime={dispatchTime} />
     </Stack>

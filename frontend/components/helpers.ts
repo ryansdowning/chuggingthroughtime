@@ -69,3 +69,12 @@ export function getUniqueStations(
   // Convert the map values to an array
   return Array.from(uniqueStations.values());
 }
+
+export function formatTime(secondsSinceMidnight: number) {
+  const hours = Math.floor(secondsSinceMidnight / 3600);
+  const mins = Math.floor((secondsSinceMidnight % 3600) / 60);
+  const secs = secondsSinceMidnight % 60;
+  return `${hours.toString().padStart(2, "0")}:${mins
+    .toString()
+    .padStart(2, "0")}:${secs.toString().padStart(2, "0")}`;
+}
