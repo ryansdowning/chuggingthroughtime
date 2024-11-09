@@ -8,7 +8,12 @@ export default function Routes() {
   return (
     <>
       {routes.map(([departureCoords, arrivalCoords], index) => (
-        <Polyline positions={[departureCoords, arrivalCoords]} color="red" />
+        <Polyline
+          key={index}
+          positions={[departureCoords, arrivalCoords]}
+          color="blue"
+          pathOptions={{ opacity: 0.5 }}
+        />
       ))}
     </>
   );
