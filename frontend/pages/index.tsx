@@ -19,6 +19,7 @@ export default function IndexPage() {
     secondsSinceMidnight: getSecondsSinceMidnight(),
     paused: false,
     incrementMultiplier: 1,
+    showPopups: true,
   });
 
   useEffect(() => {

@@ -3,7 +3,12 @@ import React from "react";
 import { useDebouncedCallback } from "use-debounce";
 
 import { Button, Group, Select, Slider, Text } from "@mantine/core";
-import { IconPlayerPause, IconPlayerPlay } from "@tabler/icons-react";
+import {
+  IconEye,
+  IconEyeOff,
+  IconPlayerPause,
+  IconPlayerPlay,
+} from "@tabler/icons-react";
 
 import { TimeReducerProps } from "./time-reducer";
 
@@ -75,6 +80,17 @@ export default function TimeScrubber({
             dropdown: { zIndex: 1000 },
           }}
         />
+        <Button
+          onClick={() => dispatchTime({ type: "toggle-popups" })}
+          variant="outline"
+          size="xs"
+        >
+          {timeState.showPopups ? (
+            <IconEye size={16} />
+          ) : (
+            <IconEyeOff size={16} />
+          )}
+        </Button>
       </Group>
       <Slider
         min={0}
