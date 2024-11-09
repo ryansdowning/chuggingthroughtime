@@ -67,6 +67,7 @@ export default function TimeScrubber({
             { value: "16", label: "16x" },
             { value: "30", label: "30x" },
             { value: "60", label: "60x" },
+            { value: "900", label: "900x" },
           ]}
           size="xs"
           style={{ width: "70px" }}

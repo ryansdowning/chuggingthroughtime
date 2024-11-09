@@ -4,7 +4,8 @@ export type Route = {
   departureCoords: Coords;
   arrivalTime: number; // seconds since midnight UTC
   arrivalCoords: Coords;
-  trainIdentifier?: string;
+  trainName?: string;
+  trainNumber?: string;
   departureIdentifier?: string;
   arrivalIdentifier?: string;
 };
