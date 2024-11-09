@@ -1,5 +1,8 @@
-import { Button, Group } from "@mantine/core";
 import dynamic from "next/dynamic";
+
+import { Stack } from "@mantine/core";
+
+import TimeScrubber from "../components/TimeScrubber";
 
 const Map = dynamic(() => import("../components/Map"), {
   ssr: false,
@@ -7,8 +10,9 @@ const Map = dynamic(() => import("../components/Map"), {
 
 export default function IndexPage() {
   return (
-    <Group mt={50} justify="center">
+    <Stack gap="md">
+      <TimeScrubber />
       <Map />
-    </Group>
+    </Stack>
   );
 }
