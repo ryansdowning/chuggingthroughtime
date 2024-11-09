@@ -1,7 +1,7 @@
-import { PropsWithChildren, useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 import L from "leaflet";
-import { Marker, Polyline, Popup, useMap } from "react-leaflet";
+import { Marker, Popup, useMap } from "react-leaflet";
 
 import { TRAIN_ICON } from "./constants";
 import { getSecondsSinceMidnight } from "./helpers";
@@ -11,21 +11,6 @@ interface RealTimeTrainProps {
   route: Route;
 }
 
-function RouteWithoutTrain({
-  route: { departureCoords, arrivalCoords, departureIdentifier },
-  children,
-}: PropsWithChildren<RealTimeTrainProps>) {
-  return (
-    <>
-      <Marker position={departureCoords}>
-        <Popup>{departureIdentifier || "Unknown Station"}</Popup>
-      </Marker>
-      <Polyline positions={[departureCoords, arrivalCoords]} color="red" />
-      {children}
-    </>
-  );
-}
-
 export default function RealTimeTrain({ route }: RealTimeTrainProps) {
   const {
     departureTime,
@@ -33,7 +18,6 @@ export default function RealTimeTrain({ route }: RealTimeTrainProps) {
     arrivalTime,
     arrivalCoords,
     trainIdentifier,
-    departureIdentifier,
   } = route;
   const map = useMap();
   const [position, setPosition] = useState(L.latLng(...departureCoords));
@@ -78,14 +62,12 @@ export default function RealTimeTrain({ route }: RealTimeTrainProps) {
   }, [map, departureTime, departureCoords, arrivalTime, arrivalCoords]);
 
   if (getSecondsSinceMidnight() > arrivalTime) {
-    return <RouteWithoutTrain route={route} />;
+    return null;
   }
 
   return (
-    <RouteWithoutTrain route={route}>
-      <Marker position={position} icon={TRAIN_ICON}>
-        <Popup>{trainIdentifier || "Unknown Train"}</Popup>
-      </Marker>
-    </RouteWithoutTrain>
+    <Marker position={position} icon={TRAIN_ICON}>
+      <Popup>{trainIdentifier || "Unknown Train"}</Popup>
+    </Marker>
   );
 }

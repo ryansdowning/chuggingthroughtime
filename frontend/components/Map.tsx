@@ -6,8 +6,10 @@ import React from "react";
 import L from "leaflet";
 import { MapContainer, TileLayer } from "react-leaflet";
 
-import { ROUTES, WASHINGTON_DC_COORDS } from "./constants";
-import RealTimeTrain from "./RealTimeTrain";
+import { WASHINGTON_DC_COORDS } from "./constants";
+import Routes from "./Routes";
+import Stations from "./Stations";
+import Trains from "./Trains";
 
 L.Icon.Default.mergeOptions({
   iconRetinaUrl:
@@ -29,9 +31,9 @@ const Map = () => {
         url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
-      {ROUTES.map((route, index) => (
-        <RealTimeTrain key={index} route={route} />
-      ))}
+      <Stations />
+      <Routes />
+      <Trains />
     </MapContainer>
   );
 };
