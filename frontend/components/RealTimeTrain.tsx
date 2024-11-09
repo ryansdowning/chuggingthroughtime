@@ -7,6 +7,8 @@ import { TRAIN_ICON } from "./constants";
 import { getSecondsSinceMidnight } from "./helpers";
 import { Coords, Route } from "./types";
 
+const PAUSE_AFTER_ARRIVAL = 30; // seconds
+
 interface RealTimeTrainProps {
   route: Route;
 }
@@ -43,9 +45,7 @@ export default function RealTimeTrain({ route }: RealTimeTrainProps) {
         // Train hasn't left yet
         return;
       } else if (elapsedTime >= totalDuration) {
-        // Stop animation when train reaches destination
         setPosition(L.latLng(...arrivalCoords));
-        return cancelAnimationFrame(animationFrameId);
       }
 
       setPosition(L.latLng(...getCoords(elapsedTime)));
@@ -61,7 +61,7 @@ export default function RealTimeTrain({ route }: RealTimeTrainProps) {
     return () => cancelAnimationFrame(animationFrameId);
   }, [map, departureTime, departureCoords, arrivalTime, arrivalCoords]);
 
-  if (getSecondsSinceMidnight() > arrivalTime) {
+  if (getSecondsSinceMidnight() > arrivalTime + PAUSE_AFTER_ARRIVAL) {
     return null;
   }
 
