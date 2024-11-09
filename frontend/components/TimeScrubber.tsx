@@ -88,6 +88,7 @@ export default function TimeScrubber({
           { value: 86399, label: "23:59:59" },
         ]}
         step={1}
+        label={(value) => formatTime(value)}
       />
     </div>
   );

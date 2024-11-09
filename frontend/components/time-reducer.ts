@@ -27,8 +27,9 @@ export type TimeAction =
       payload: { incrementMultiplier: number };
     };
 
-function clampTime(seconds: number): number {
-  return Math.max(Math.min(seconds, 86400), 0);
+// Conver [-infinity, infinity] to [0, 86400]
+function wrapTime(seconds: number): number {
+  return ((seconds % 86400) + 86400) % 86400;
 }
 
 export function timeReducer(state: TimeState, action: TimeAction): TimeState {
@@ -36,12 +37,12 @@ export function timeReducer(state: TimeState, action: TimeAction): TimeState {
     case "set-time":
       return {
         ...state,
-        secondsSinceMidnight: clampTime(action.payload.secondsSinceMidnight),
+        secondsSinceMidnight: wrapTime(action.payload.secondsSinceMidnight),
       };
     case "increment-time":
       return {
         ...state,
-        secondsSinceMidnight: clampTime(
+        secondsSinceMidnight: wrapTime(
           state.secondsSinceMidnight +
             action.payload.seconds * state.incrementMultiplier
         ),
