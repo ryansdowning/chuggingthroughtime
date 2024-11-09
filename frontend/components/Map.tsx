@@ -1,11 +1,16 @@
+import 'leaflet/dist/leaflet.css';
+import 'leaflet-omnivore';
+
+import React, { useState } from 'react';
+
+import L from 'leaflet';
 // MapComponent.tsx
-import { MapContainer, TileLayer, Marker, Popup, useMap } from "react-leaflet";
-import "leaflet/dist/leaflet.css";
-import L from "leaflet";
-import React, { useEffect, useState } from "react";
-import "leaflet/dist/leaflet.css";
-import "leaflet-omnivore";
-import KMLLayer from "./KMLLayer";
+import {
+  MapContainer,
+  TileLayer,
+} from 'react-leaflet';
+
+import KMLLayer from './KMLLayer';
 
 // Fix for default icon issues in Leaflet
 delete (L.Icon.Default.prototype as any)._getIconUrl;
@@ -52,7 +57,8 @@ const Map = () => {
       style={{ height: "100vh", width: "100%" }}
     >
       <TileLayer
-        url="https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png"
+        url="https://cartodb-basemaps-{s}.global.ssl.fastly.net/light_nolabels/{z}/{x}/{y}{r}.png"
+        // url="https://stamen-tiles.a.ssl.fastly.net/toner-lite/{z}/{x}/{y}.png"
         // url="https://{s}.tiles.openrailwaymap.org/standard/{z}/{x}/{y}.png"
         attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
       />
