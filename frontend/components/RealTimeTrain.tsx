@@ -83,7 +83,7 @@ export default function RealTimeTrain({
           </div>
           <div>
             Average speed (est.):{" "}
-            <span style={{ fontWeight: "bold" }}>100 MPH</span>
+            <span style={{ fontWeight: "bold" }}>{route.mph} MPH</span>
           </div>
         </Stack>
       </Popup>

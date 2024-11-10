@@ -8,4 +8,5 @@ export type Route = {
   trainNumber?: string;
   departureIdentifier?: string;
   arrivalIdentifier?: string;
+  mph?: number;
 };
